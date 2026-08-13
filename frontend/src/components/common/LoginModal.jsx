@@ -1,365 +1,346 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import api from "../../services/api";
 import "../../styles/login-modal.css";
 
 function LoginModal({
-  isOpen,
-  onClose,
-  onSuccess
+    isOpen,
+    onClose,
+    onSuccess
 }) {
-  const { login } = useAuth();
+    const { login } = useAuth();
 
-  const [mode, setMode] = useState("login");
+    const [mode, setMode] = useState("login");
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] =
+        useState("");
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
-  const [submitting, setSubmitting] =
-    useState(false);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  const switchMode = (newMode) => {
-    setMode(newMode);
-    setError("");
-    setSuccess("");
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-  };
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    try {
-      setSubmitting(true);
-      setError("");
-
-      await login(email, password);
-
-      setEmail("");
-      setPassword("");
-
-      onSuccess();
-    } catch (error) {
-      setError(
-        error.response?.data?.message ||
-          "Invalid email or password"
-      );
-    } finally {
-      setSubmitting(false);
+    if (!isOpen) {
+        return null;
     }
-  };
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
+    const switchMode = (newMode) => {
+        setMode(newMode);
+        setError("");
+        setSuccess("");
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+    };
 
-    try {
-      setSubmitting(true);
-      setError("");
-      setSuccess("");
+    const handleLogin = async (event) => {
+        event.preventDefault();
 
-      if (password !== confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
+        try {
+            setSubmitting(true);
+            setError("");
 
-      await apiRegister();
+            await login(email, password);
 
-      setSuccess(
-        "Account created successfully. You can now login."
-      );
+            setEmail("");
+            setPassword("");
 
-      setTimeout(() => {
-        switchMode("login");
-      }, 1000);
-    } catch (error) {
-      setError(
-        error.response?.data?.message ||
-          "Failed to create account"
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const apiRegister = async () => {
-    const response = await fetch(
-      "http://localhost:5000/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw {
-        response: {
-          data
+            onSuccess();
+        } catch (error) {
+            setError(
+                error.response?.data?.message ||
+                "Invalid email or password"
+            );
+        } finally {
+            setSubmitting(false);
         }
-      };
-    }
+    };
 
-    return data;
-  };
+    const handleRegister = async (event) => {
+        event.preventDefault();
 
-  return (
-    <div
-      className="login-modal-overlay"
-      onClick={onClose}
-    >
-      <div
-        className="login-modal"
-        onClick={(event) =>
-          event.stopPropagation()
+        try {
+            setSubmitting(true);
+            setError("");
+            setSuccess("");
+
+            if (password !== confirmPassword) {
+                setError("Passwords do not match");
+                return;
+            }
+
+            await api.post("/auth/register", {
+                name,
+                email,
+                password
+            });
+
+            setSuccess(
+                "Account created successfully. You can now login."
+            );
+
+            setTimeout(() => {
+                switchMode("login");
+            }, 1000);
+
+        } catch (error) {
+            setError(
+                error.response?.data?.message ||
+                "Failed to create account"
+            );
+        } finally {
+            setSubmitting(false);
         }
-      >
-        <button
-          type="button"
-          className="login-modal-close"
-          onClick={onClose}
+    };
+
+    return (
+        <div
+            className="login-modal-overlay"
+            onClick={onClose}
         >
-          ×
-        </button>
-
-        {mode === "login" ? (
-          <>
-            <div className="login-modal-header">
-              <div className="login-modal-icon">
-                🔐
-              </div>
-
-              <h2>Login Required</h2>
-
-              <p>
-                Please login to add and manage
-                recipes.
-              </p>
-            </div>
-
-            {error && (
-              <div className="login-modal-error">
-                {error}
-              </div>
-            )}
-
-            <form
-              onSubmit={handleLogin}
-              className="login-modal-form"
-            >
-              <div className="form-group">
-                <label htmlFor="login-email">
-                  Email
-                </label>
-
-                <input
-                  id="login-email"
-                  type="email"
-                  value={email}
-                  onChange={(event) =>
-                    setEmail(event.target.value)
-                  }
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="login-password">
-                  Password
-                </label>
-
-                <input
-                  id="login-password"
-                  type="password"
-                  value={password}
-                  onChange={(event) =>
-                    setPassword(
-                      event.target.value
-                    )
-                  }
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="login-modal-submit"
-                disabled={submitting}
-              >
-                {submitting
-                  ? "Logging in..."
-                  : "Login"}
-              </button>
-            </form>
-
-            <div className="auth-switch">
-              <span>
-                Don't have an account?
-              </span>
-
-              <button
-                type="button"
-                onClick={() =>
-                  switchMode("register")
+            <div
+                className="login-modal"
+                onClick={(event) =>
+                    event.stopPropagation()
                 }
-              >
-                Create new user
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="login-modal-header">
-              <div className="login-modal-icon">
-                👤
-              </div>
-
-              <h2>Create Account</h2>
-
-              <p>
-                Create an account to add
-                your recipes.
-              </p>
-            </div>
-
-            {error && (
-              <div className="login-modal-error">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="login-modal-success">
-                {success}
-              </div>
-            )}
-
-            <form
-              onSubmit={handleRegister}
-              className="login-modal-form"
             >
-              <div className="form-group">
-                <label htmlFor="register-name">
-                  Name
-                </label>
+                <button
+                    type="button"
+                    className="login-modal-close"
+                    onClick={onClose}
+                >
+                    ×
+                </button>
 
-                <input
-                  id="register-name"
-                  type="text"
-                  value={name}
-                  onChange={(event) =>
-                    setName(event.target.value)
-                  }
-                  placeholder="Enter your name"
-                  required
-                />
-              </div>
+                {mode === "login" ? (
+                    <>
+                        <div className="login-modal-header">
+                            <div className="login-modal-icon">
+                                🔐
+                            </div>
 
-              <div className="form-group">
-                <label htmlFor="register-email">
-                  Email
-                </label>
+                            <h2>Login Required</h2>
 
-                <input
-                  id="register-email"
-                  type="email"
-                  value={email}
-                  onChange={(event) =>
-                    setEmail(event.target.value)
-                  }
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
+                            <p>
+                                Please login to add and manage
+                                recipes.
+                            </p>
+                        </div>
 
-              <div className="form-group">
-                <label htmlFor="register-password">
-                  Password
-                </label>
+                        {error && (
+                            <div className="login-modal-error">
+                                {error}
+                            </div>
+                        )}
 
-                <input
-                  id="register-password"
-                  type="password"
-                  value={password}
-                  onChange={(event) =>
-                    setPassword(
-                      event.target.value
-                    )
-                  }
-                  placeholder="Create a password"
-                  required
-                />
-              </div>
+                        <form
+                            onSubmit={handleLogin}
+                            className="login-modal-form"
+                        >
+                            <div className="form-group">
+                                <label htmlFor="login-email">
+                                    Email
+                                </label>
 
-              <div className="form-group">
-                <label htmlFor="confirm-password">
-                  Confirm Password
-                </label>
+                                <input
+                                    id="login-email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) =>
+                                        setEmail(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                            </div>
 
-                <input
-                  id="confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(event) =>
-                    setConfirmPassword(
-                      event.target.value
-                    )
-                  }
-                  placeholder="Confirm your password"
-                  required
-                />
-              </div>
+                            <div className="form-group">
+                                <label htmlFor="login-password">
+                                    Password
+                                </label>
 
-              <button
-                type="submit"
-                className="login-modal-submit"
-                disabled={submitting}
-              >
-                {submitting
-                  ? "Creating..."
-                  : "Create Account"}
-              </button>
-            </form>
+                                <input
+                                    id="login-password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(event) =>
+                                        setPassword(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                            </div>
 
-            <div className="auth-switch">
-              <span>
-                Already have an account?
-              </span>
+                            <button
+                                type="submit"
+                                className="login-modal-submit"
+                                disabled={submitting}
+                            >
+                                {submitting
+                                    ? "Logging in..."
+                                    : "Login"}
+                            </button>
+                        </form>
 
-              <button
-                type="button"
-                onClick={() =>
-                  switchMode("login")
-                }
-              >
-                Login
-              </button>
+                        <div className="auth-switch">
+                            <span>
+                                Don't have an account?
+                            </span>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    switchMode("register")
+                                }
+                            >
+                                Create new user
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="login-modal-header">
+                            <div className="login-modal-icon">
+                                👤
+                            </div>
+
+                            <h2>Create Account</h2>
+
+                            <p>
+                                Create an account to add
+                                your recipes.
+                            </p>
+                        </div>
+
+                        {error && (
+                            <div className="login-modal-error">
+                                {error}
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="login-modal-success">
+                                {success}
+                            </div>
+                        )}
+
+                        <form
+                            onSubmit={handleRegister}
+                            className="login-modal-form"
+                        >
+                            <div className="form-group">
+                                <label htmlFor="register-name">
+                                    Name
+                                </label>
+
+                                <input
+                                    id="register-name"
+                                    type="text"
+                                    value={name}
+                                    onChange={(event) =>
+                                        setName(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your name"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="register-email">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="register-email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) =>
+                                        setEmail(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="register-password">
+                                    Password
+                                </label>
+
+                                <input
+                                    id="register-password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(event) =>
+                                        setPassword(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Create a password"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="confirm-password">
+                                    Confirm Password
+                                </label>
+
+                                <input
+                                    id="confirm-password"
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(event) =>
+                                        setConfirmPassword(
+                                            event.target.value
+                                        )
+                                    }
+                                    placeholder="Confirm your password"
+                                    required
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="login-modal-submit"
+                                disabled={submitting}
+                            >
+                                {submitting
+                                    ? "Creating..."
+                                    : "Create Account"}
+                            </button>
+                        </form>
+
+                        <div className="auth-switch">
+                            <span>
+                                Already have an account?
+                            </span>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    switchMode("login")
+                                }
+                            >
+                                Login
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
 
 export default LoginModal;

@@ -1,76 +1,117 @@
 import { useNavigate } from "react-router-dom";
 
 function RecipeCard({ recipe }) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const getImageUrl = () => {
-  const url =
-    recipe.images?.[0]?.url ||
-    recipe.image?.url;
+    // =========================================
+    // GET IMAGE URL
+    // =========================================
 
-  if (!url) {
-    return "https://via.placeholder.com/400x250?text=No+Image";
-  }
+    const getImageUrl = () => {
+        const url =
+            recipe.images?.[0]?.url ||
+            recipe.image?.url;
 
-  if (url.startsWith("http")) {
-    return url;
-  }
+        if (!url) {
+            return "https://via.placeholder.com/400x250?text=No+Image";
+        }
 
-  return `http://localhost:5000${url}`;
-};
+        // Cloudinary or any absolute URL
+        if (url.startsWith("http")) {
+            return url;
+        }
 
-const imageUrl = getImageUrl();
+        // Old/local image path
+        return `${
+            import.meta.env.VITE_API_URL.replace(
+                "/api",
+                ""
+            )
+        }${url}`;
+    };
 
-  return (
-    <article
-      className="recipe-card"
-      onClick={() => navigate(`/recipe/${recipe._id}`)}
-    >
-      <div className="recipe-card-image-wrapper">
-        <img
-          src={imageUrl}
-          alt={recipe.title}
-          className="recipe-card-image"
-        />
+    const imageUrl = getImageUrl();
 
-        <span className="recipe-difficulty">
-          {recipe.difficulty}
-        </span>
-      </div>
+    return (
+        <article
+            className="recipe-card"
+            onClick={() =>
+                navigate(
+                    `/recipe/${recipe._id}`
+                )
+            }
+        >
 
-      <div className="recipe-card-body">
-        <div className="recipe-card-top">
-          <span className="recipe-cuisine">
-            {recipe.cuisine}
-          </span>
+            {/* =====================================
+                IMAGE
+            ===================================== */}
 
-          <span className="recipe-rating">
-            ⭐ {recipe.rating?.average?.toFixed(1) || "0.0"}
-          </span>
-        </div>
+            <div className="recipe-card-image-wrapper">
 
-        <h3>{recipe.title}</h3>
+                <img
+                    src={imageUrl}
+                    alt={recipe.title}
+                    className="recipe-card-image"
+                />
 
-        <p className="recipe-description">
-          {recipe.description}
-        </p>
+                <span className="recipe-difficulty">
+                    {recipe.difficulty}
+                </span>
 
-        <div className="recipe-meta">
-          <span>
-            ⏱ {recipe.preparationTime + recipe.cookingTime} min
-          </span>
+            </div>
 
-          <span>
-            👥 {recipe.servingSize}
-          </span>
+            {/* =====================================
+                RECIPE DETAILS
+            ===================================== */}
 
-          <span>
-            {recipe.foodType}
-          </span>
-        </div>
-      </div>
-    </article>
-  );
+            <div className="recipe-card-body">
+
+                <div className="recipe-card-top">
+
+                    <span className="recipe-cuisine">
+                        {recipe.cuisine}
+                    </span>
+
+                    <span className="recipe-rating">
+                        ⭐{" "}
+                        {recipe.rating?.average?.toFixed(
+                            1
+                        ) || "0.0"}
+                    </span>
+
+                </div>
+
+                <h3>
+                    {recipe.title}
+                </h3>
+
+                <p className="recipe-description">
+                    {recipe.description}
+                </p>
+
+                <div className="recipe-meta">
+
+                    <span>
+                        ⏱{" "}
+                        {recipe.preparationTime +
+                            recipe.cookingTime}{" "}
+                        min
+                    </span>
+
+                    <span>
+                        👥 {recipe.servingSize}
+                    </span>
+
+                    <span>
+                        {recipe.foodType}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+    );
 }
 
 export default RecipeCard;

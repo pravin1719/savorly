@@ -7,97 +7,114 @@ import RecipeForm from "../components/recipe/RecipeForm";
 import api from "../services/api";
 
 function AddRecipe() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [submitting, setSubmitting] =
-    useState(false);
+    const [submitting, setSubmitting] =
+        useState(false);
 
-  const [error, setError] =
-    useState("");
+    const [error, setError] =
+        useState("");
 
-  const handleSubmit = async (
-    recipeData,
-    images
-  ) => {
-    try {
-      setSubmitting(true);
-      setError("");
+    const handleSubmit = async (
+        recipeData,
+        images = []
+    ) => {
+        try {
+            setSubmitting(true);
+            setError("");
 
-      // 1. Create recipe
-      const recipeResponse =
-        await api.post(
-          "/recipes",
-          recipeData
-        );
+            // =========================================
+            // 1. CREATE RECIPE
+            // POST /api/recipes
+            // =========================================
 
-      const recipe =
-        recipeResponse.data.data;
+            const recipeResponse =
+                await api.post(
+                    "/recipes",
+                    recipeData
+                );
 
-      // 2. Upload images
-      if (
-        recipe?._id &&
-        images.length > 0
-      ) {
-        const formData =
-          new FormData();
+            const recipe =
+                recipeResponse.data.data;
 
-        images.forEach((image) => {
-          formData.append(
-            "images",
-            image
-          );
-        });
-
-        await api.post(
-          `/recipes/${recipe._id}/images`,
-          formData,
-          {
-            headers: {
-              "Content-Type":
-                "multipart/form-data"
+            if (!recipe?._id) {
+                throw new Error(
+                    "Recipe was created but recipe ID was not returned"
+                );
             }
-          }
-        );
-      }
 
-      // 3. Go to details
-      navigate(
-        `/recipe/${recipe._id}`
-      );
+            // =========================================
+            // 2. UPLOAD RECIPE IMAGES
+            // POST /api/recipes/:id/images
+            // =========================================
 
-    } catch (error) {
-      console.error(
-        "Create recipe error:",
-        error
-      );
+            if (images?.length > 0) {
+                const imageFormData =
+                    new FormData();
 
-      setError(
-        error.response?.data?.message ||
-          "Failed to create recipe"
-      );
+                images.forEach((image) => {
+                    if (image instanceof File) {
+                        imageFormData.append(
+                            "images",
+                            image
+                        );
+                    }
+                });
 
-    } finally {
-      setSubmitting(false);
-    }
-  };
+                await api.post(
+                    `/recipes/${recipe._id}/images`,
+                    imageFormData,
+                    {
+                        headers: {
+                            "Content-Type":
+                                "multipart/form-data"
+                        }
+                    }
+                );
+            }
 
-  return (
-    <PageLayout>
+            // =========================================
+            // 3. GO TO RECIPE DETAILS
+            // =========================================
 
-      {error && (
-        <div className="form-error">
-          {error}
-        </div>
-      )}
+            navigate(
+                `/recipe/${recipe._id}`
+            );
 
-      <RecipeForm
-        mode="create"
-        onSubmit={handleSubmit}
-        submitting={submitting}
-      />
+        } catch (error) {
+            console.error(
+                "Create recipe error:",
+                error
+            );
 
-    </PageLayout>
-  );
+            setError(
+                error.response?.data?.message ||
+                error.message ||
+                "Failed to create recipe"
+            );
+
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    return (
+        <PageLayout>
+
+            {error && (
+                <div className="form-error">
+                    {error}
+                </div>
+            )}
+
+            <RecipeForm
+                mode="create"
+                onSubmit={handleSubmit}
+                submitting={submitting}
+            />
+
+        </PageLayout>
+    );
 }
 
 export default AddRecipe;

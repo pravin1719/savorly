@@ -199,13 +199,11 @@ function RecipeDetails() {
             return null;
         }
 
-        if (
-            image.url.startsWith("http")
-        ) {
+        if (image.url.startsWith("http")) {
             return image.url;
         }
 
-        return `http://localhost:5000${image.url}`;
+        return `${import.meta.env.VITE_API_URL.replace("/api", "")}${image.url}`;
     };
 
     // =========================================
