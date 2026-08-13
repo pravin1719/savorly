@@ -1,6 +1,33 @@
 const Recipe = require("../models/recipe.model");
+const cloudinary = require("../config/cloudinary");
 const { deleteFile } = require("../utils/file.util");
+const streamifier = require("streamifier");
 
+/* =========================================
+  helper
+========================================= */
+const uploadToCloudinary = (file) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream =
+            cloudinary.uploader.upload_stream(
+                {
+                    folder: "savorly/recipes",
+                    resource_type: "image"
+                },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+        streamifier
+            .createReadStream(file.buffer)
+            .pipe(uploadStream);
+    });
+};
 /* =========================================
    NORMALIZE ARRAY ORDER
 ========================================= */
@@ -301,80 +328,46 @@ const deleteRecipe = async (
    UPLOAD RECIPE IMAGES
 ========================================= */
 
-const uploadRecipeImages = async (
-    recipeId,
-    files
-) => {
-    const recipe =
-        await Recipe.findById(
-            recipeId
-        );
-
-    /* Recipe doesn't exist */
+const uploadRecipeImages = async (recipeId, files) => {
+    const recipe = await Recipe.findById(recipeId);
 
     if (!recipe) {
-        if (
-            files &&
-            files.length > 0
-        ) {
-            for (const file of files) {
-                await deleteFile(
-                    file.filename
-                );
-            }
-        }
-
-        const error = new Error(
-            "Recipe not found"
-        );
-
+        const error = new Error("Recipe not found");
         error.statusCode = 404;
-
         throw error;
     }
 
-    /* No files */
-
-    if (
-        !files ||
-        files.length === 0
-    ) {
+    if (!files || files.length === 0) {
         const error = new Error(
             "At least one image is required"
         );
 
         error.statusCode = 400;
-
         throw error;
     }
 
     const startingOrder =
         recipe.images.length + 1;
 
-    const newImages =
-        files.map(
-            (file, index) => ({
-                filename:
-                    file.filename,
+    const newImages = [];
 
-                url:
-                    `/uploads/recipes/${file.filename}`,
+    for (let index = 0; index < files.length; index++) {
+        const file = files[index];
 
-                mimetype:
-                    file.mimetype,
+        const result =
+            await uploadToCloudinary(file);
 
-                size:
-                    file.size,
+        newImages.push({
+            filename: result.public_id,
+            url: result.secure_url,
+            publicId: result.public_id,
+            mimetype: file.mimetype,
+            size: file.size,
+            order: startingOrder + index
+        });
+    }
 
-                order:
-                    startingOrder +
-                    index
-            })
-        );
-
-    recipe.images.push(
-        ...newImages
-    );
+    recipe.images.push(...newImages);
 
     await recipe.save();
 
@@ -389,10 +382,7 @@ const deleteRecipeImage = async (
     recipeId,
     filename
 ) => {
-    const recipe =
-        await Recipe.findById(
-            recipeId
-        );
+    const recipe = await Recipe.findById(recipeId);
 
     if (!recipe) {
         const error = new Error(
@@ -400,16 +390,12 @@ const deleteRecipeImage = async (
         );
 
         error.statusCode = 404;
-
         throw error;
     }
 
-    const imageIndex =
-        recipe.images.findIndex(
-            (image) =>
-                image.filename ===
-                filename
-        );
+    const imageIndex = recipe.images.findIndex(
+        (image) => image.filename === filename
+    );
 
     if (imageIndex === -1) {
         const error = new Error(
@@ -417,32 +403,23 @@ const deleteRecipeImage = async (
         );
 
         error.statusCode = 404;
-
         throw error;
     }
 
-    const image =
-        recipe.images[imageIndex];
+    const image = recipe.images[imageIndex];
 
-    /* Delete physical file */
-
+    // Delete image from Cloudinary
     await deleteFile(
-        image.filename
+        image.publicId || image.filename
     );
 
-    /* Remove image */
+    // Remove image from recipe
+    recipe.images.splice(imageIndex, 1);
 
-    recipe.images.splice(
-        imageIndex,
-        1
-    );
-
-    /* Reorder remaining images */
-
+    // Reorder remaining images
     recipe.images.forEach(
         (image, index) => {
-            image.order =
-                index + 1;
+            image.order = index + 1;
         }
     );
 

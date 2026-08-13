@@ -1,24 +1,17 @@
-const fs = require("fs/promises");
-const path = require("path");
+const cloudinary = require("../config/cloudinary");
 
-const deleteFile = async (filename) => {
-    if (!filename) {
+const deleteFile = async (publicId) => {
+    if (!publicId) {
         return;
     }
 
-    const uploadDirectory = path.resolve(
-        process.env.UPLOAD_DIR || "uploads/recipes"
-    );
-
-    const filePath = path.join(uploadDirectory, filename);
-
     try {
-        await fs.unlink(filePath);
+        await cloudinary.uploader.destroy(publicId);
     } catch (error) {
-        // File already doesn't exist
-        if (error.code === "ENOENT") {
-            return;
-        }
+        console.error(
+            "Cloudinary delete error:",
+            error
+        );
 
         throw error;
     }
