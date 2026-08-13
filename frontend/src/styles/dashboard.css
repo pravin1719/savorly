@@ -1,0 +1,758 @@
+/* =========================================
+   DASHBOARD PAGE
+========================================= */
+
+.dashboard-page {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--background);
+}
+
+/* =========================================
+   DASHBOARD HEADER
+========================================= */
+
+.dashboard-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.dashboard-title-section {
+  min-width: 0;
+}
+
+.dashboard-title {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.dashboard-subtitle {
+  margin: 5px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   ADD RECIPE BUTTON
+========================================= */
+
+.add-recipe-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 38px;
+
+  padding: 9px 16px;
+
+  border: none;
+  border-radius: var(--radius-md);
+
+  background: var(--primary);
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.add-recipe-button:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.add-recipe-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   RECIPE FILTERS
+========================================= */
+
+.recipe-filters {
+  width: 100%;
+
+  margin-bottom: 22px;
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.recipe-search {
+  position: relative;
+
+  width: 100%;
+
+  margin-bottom: 12px;
+}
+
+.recipe-search > span {
+  position: absolute;
+
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: var(--text-muted);
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+.recipe-search input {
+  display: block;
+
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 90px 0 40px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font-size: 12px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recipe-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.recipe-search input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px var(--primary-light);
+}
+
+/* =========================================
+   SEARCH BUTTON
+========================================= */
+
+.recipe-search button {
+  position: absolute;
+
+  right: 4px;
+  top: 4px;
+
+  height: 34px;
+
+  padding: 0 15px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: var(--primary);
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.recipe-search button:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   FILTER ROW
+========================================= */
+
+.filter-row {
+  width: 100%;
+
+  display: grid;
+
+  /*
+    All filters share the available width.
+  */
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+/* =========================================
+   FILTER SELECT
+========================================= */
+
+.filter-row select {
+  width: 100%;
+
+  min-width: 0;
+
+  height: 40px;
+
+  padding: 0 32px 0 12px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font-size: 11px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.filter-row select:hover {
+  border-color: #cbd5e1;
+}
+
+.filter-row select:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px var(--primary-light);
+}
+
+/* =========================================
+   RECIPE GRID
+========================================= */
+
+.recipe-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+/* =========================================
+   RECIPE CARD
+========================================= */
+
+.recipe-card {
+  min-width: 0;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #cbd5e1;
+
+  box-shadow: var(--shadow-lg);
+}
+
+/* =========================================
+   RECIPE CARD IMAGE
+========================================= */
+
+.recipe-card-image-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 3 / 2;
+
+  overflow: hidden;
+
+  background: #f1f5f9;
+}
+
+.recipe-card-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  background: #f1f5f9;
+}
+
+/* =========================================
+   DIFFICULTY
+========================================= */
+
+.recipe-difficulty {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  color: var(--text-primary);
+
+  font-size: 10px;
+  font-weight: 600;
+
+  box-shadow:
+    0 2px 7px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================
+   CARD BODY
+========================================= */
+
+.recipe-card-body {
+  padding: 14px;
+}
+
+.recipe-card-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 7px;
+}
+
+.recipe-cuisine {
+  color: var(--primary);
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+.recipe-rating {
+  display: flex;
+
+  align-items: center;
+
+  gap: 2px;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  white-space: nowrap;
+}
+
+.recipe-card-body h3 {
+  margin: 0 0 6px;
+
+  color: var(--text-primary);
+
+  font-size: 15px;
+  font-weight: 700;
+
+  line-height: 1.35;
+}
+
+.recipe-description {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   RECIPE META
+========================================= */
+
+.recipe-meta {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  margin-top: 12px;
+
+  padding-top: 10px;
+
+  border-top: 1px solid var(--border);
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+}
+
+.recipe-meta span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 3px;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.recipe-empty-state {
+  width: 100%;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  background: var(--surface);
+
+  border: 1px dashed var(--border);
+
+  border-radius: var(--radius-lg);
+}
+
+.recipe-empty-icon {
+  margin-bottom: 12px;
+
+  font-size: 35px;
+}
+
+.recipe-empty-state h3 {
+  margin: 0 0 6px;
+
+  color: var(--text-primary);
+
+  font-size: 16px;
+}
+
+.recipe-empty-state p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+}
+
+/* =========================================
+   LOADING
+========================================= */
+
+.recipe-loading {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 250px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+/* =========================================
+   ERROR
+========================================= */
+
+.recipe-error {
+  padding: 14px 16px;
+
+  border: 1px solid #fecaca;
+
+  border-radius: var(--radius-md);
+
+  background: #fee2e2;
+
+  color: var(--danger);
+
+  font-size: 12px;
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.recipe-pagination {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 25px;
+
+  padding-bottom: 25px;
+}
+
+.pagination-button {
+  min-width: 30px;
+
+  height: 30px;
+
+  padding: 0 9px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 6px;
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.pagination-button:hover {
+  border-color: var(--primary);
+
+  color: var(--primary);
+}
+
+.pagination-button.active {
+  border-color: var(--primary);
+
+  background: var(--primary);
+
+  color: #ffffff;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .recipe-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-row {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 800px) {
+  .dashboard-header {
+    align-items: flex-start;
+  }
+
+  .filter-row {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .dashboard-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+  }
+
+  .dashboard-actions {
+    width: 100%;
+  }
+
+  .add-recipe-button {
+    width: 100%;
+  }
+
+  .recipe-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .filter-row select {
+    height: 40px;
+  }
+
+  .recipe-card-image-wrapper {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 19px;
+  }
+
+  .dashboard-subtitle {
+    font-size: 11px;
+  }
+
+  .recipe-search input {
+    height: 42px;
+
+    padding-left: 36px;
+    padding-right: 80px;
+  }
+
+  .recipe-search button {
+    height: 34px;
+
+    right: 4px;
+    top: 4px;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row select {
+    width: 100%;
+
+    height: 40px;
+  }
+
+  .recipe-card-body {
+    padding: 13px;
+  }
+
+  .recipe-card-body h3 {
+    font-size: 14px;
+  }
+
+  .recipe-description {
+    font-size: 10px;
+  }
+
+  .recipe-meta {
+    gap: 8px;
+
+    font-size: 9px;
+  }
+}

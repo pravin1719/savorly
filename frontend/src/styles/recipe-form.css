@@ -1,0 +1,871 @@
+/* =========================================
+   RECIPE FORM
+========================================= */
+
+.recipe-form {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   FORM SECTION
+========================================= */
+
+.form-section {
+  width: 100%;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-lg);
+
+  padding: 24px;
+
+  margin-bottom: 20px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.form-section-header {
+  margin-bottom: 22px;
+}
+
+.form-section-header h2 {
+  margin: 0 0 5px;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  color: var(--text-primary);
+}
+
+.form-section-header p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: var(--text-secondary);
+}
+
+/* =========================================
+   BASIC FORM GRID
+========================================= */
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  min-width: 0;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  min-height: 42px;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: #ffffff;
+
+  color: var(--text-primary);
+
+  font-size: 13px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+  min-height: 110px;
+
+  resize: vertical;
+
+  line-height: 1.5;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px var(--primary-light);
+}
+
+/* =========================================
+   IMAGE UPLOADER
+========================================= */
+
+.image-uploader {
+  width: 100%;
+}
+
+/* =========================================
+   IMAGE PREVIEW GRID
+========================================= */
+
+.image-preview-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+/* =========================================
+   IMAGE PREVIEW ITEM
+========================================= */
+
+.image-preview-item {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: #f1f5f9;
+}
+
+.image-preview-item img {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* =========================================
+   REMOVE IMAGE BUTTON
+========================================= */
+
+.remove-image-button {
+  position: absolute;
+
+  top: 7px;
+
+  right: 7px;
+
+  width: 28px;
+
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.72);
+
+  color: #ffffff;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  z-index: 2;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.remove-image-button:hover {
+  background: var(--danger);
+
+  transform: scale(1.05);
+}
+
+/* =========================================
+   EXISTING IMAGE LABEL
+========================================= */
+
+.existing-image-label {
+  position: absolute;
+
+  left: 7px;
+
+  bottom: 7px;
+
+  padding: 4px 7px;
+
+  border-radius: 5px;
+
+  background: rgba(0, 0, 0, 0.7);
+
+  color: #ffffff;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  z-index: 2;
+}
+
+/* =========================================
+   UPLOAD BOX
+========================================= */
+
+.image-upload-box {
+  width: 100%;
+
+  min-height: 170px;
+
+  padding: 25px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  gap: 6px;
+
+  border: 2px dashed var(--border);
+
+  border-radius: var(--radius-lg);
+
+  background: #ffffff;
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.image-upload-box:hover {
+  border-color: var(--primary);
+
+  background: var(--primary-light);
+}
+
+.upload-icon {
+  width: 48px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 6px;
+
+  border-radius: 50%;
+
+  background: var(--primary-light);
+
+  color: var(--primary);
+
+  font-size: 24px;
+
+  font-weight: 400;
+}
+
+.image-upload-box strong {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: var(--text-primary);
+}
+
+.image-upload-box span {
+  margin-top: 2px;
+
+  font-size: 12px;
+
+  color: var(--text-secondary);
+}
+
+.image-upload-box small {
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  color: var(--text-muted);
+}
+
+/* =========================================
+   INGREDIENT / STEP LIST
+========================================= */
+
+.sortable-list {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* =========================================
+   SORTABLE ITEM
+========================================= */
+
+.sortable-item {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    32px
+    34px
+    minmax(0, 1fr)
+    130px
+    110px
+    34px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sortable-item:hover {
+  border-color: #cbd5e1;
+
+  box-shadow: var(--shadow-sm);
+}
+
+/* =========================================
+   DRAG HANDLE
+========================================= */
+
+.drag-handle {
+  width: 30px;
+
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--text-muted);
+
+  font-size: 17px;
+
+  cursor: grab;
+}
+
+.drag-handle:hover {
+  color: var(--primary);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* =========================================
+   ITEM NUMBER
+========================================= */
+
+.item-number {
+  width: 28px;
+
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--primary-light);
+
+  color: var(--primary);
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+/* =========================================
+   SORTABLE INPUTS
+========================================= */
+
+.sortable-item input,
+.sortable-item textarea {
+  width: 100%;
+
+  padding: 9px 10px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: #ffffff;
+
+  color: var(--text-primary);
+
+  font-size: 12px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sortable-item input {
+  height: 38px;
+}
+
+.sortable-item textarea {
+  min-height: 55px;
+
+  resize: vertical;
+
+  line-height: 1.4;
+}
+
+.sortable-item input::placeholder,
+.sortable-item textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.sortable-item input:focus,
+.sortable-item textarea:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px var(--primary-light);
+}
+
+/* =========================================
+   STEP ITEM
+========================================= */
+
+.step-item {
+  grid-template-columns:
+    32px
+    34px
+    minmax(0, 1fr)
+    34px;
+}
+
+.step-item textarea {
+  width: 100%;
+}
+
+/* =========================================
+   REMOVE ROW BUTTON
+========================================= */
+
+.remove-row-button {
+  width: 30px;
+
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: var(--radius-md);
+
+  background: #fee2e2;
+
+  color: var(--danger);
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.remove-row-button:hover {
+  background: #fecaca;
+
+  transform: scale(1.05);
+}
+
+/* =========================================
+   ADD ROW BUTTON
+========================================= */
+
+.add-row-button {
+  align-self: flex-start;
+
+  margin-top: 8px;
+
+  padding: 9px 14px;
+
+  border: 1px dashed var(--primary);
+
+  border-radius: var(--radius-md);
+
+  background: var(--primary-light);
+
+  color: var(--primary);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.add-row-button:hover {
+  background: #ffedd5;
+
+  border-color: var(--primary-dark);
+}
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  padding-bottom: 30px;
+}
+
+.primary-button {
+  min-width: 140px;
+
+  padding: 12px 22px;
+
+  border: none;
+
+  border-radius: var(--radius-md);
+
+  background: var(--primary);
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primary-button:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-1px);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.form-error {
+  width: 100%;
+
+  max-width: 1100px;
+
+  margin: 0 auto 15px;
+
+  padding: 12px 15px;
+
+  border: 1px solid #fecaca;
+
+  border-radius: var(--radius-md);
+
+  background: #fee2e2;
+
+  color: var(--danger);
+
+  font-size: 13px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .recipe-form {
+    max-width: 100%;
+  }
+
+  .image-preview-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .sortable-item {
+    grid-template-columns:
+      30px
+      32px
+      minmax(0, 1fr)
+      100px
+      90px
+      32px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .form-section {
+    padding: 18px;
+
+    margin-bottom: 15px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .form-group-full {
+    grid-column: auto;
+  }
+
+  .form-section-header {
+    margin-bottom: 18px;
+  }
+
+  .form-section-header h2 {
+    font-size: 17px;
+  }
+
+  .image-preview-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .image-preview-item {
+    aspect-ratio: 4 / 3;
+  }
+
+  .sortable-item {
+    grid-template-columns:
+      28px
+      30px
+      minmax(0, 1fr)
+      30px;
+
+    gap: 7px;
+
+    padding: 8px;
+  }
+
+  .sortable-item input {
+    grid-column: 3;
+
+    width: 100%;
+  }
+
+  .sortable-item input:nth-of-type(1) {
+    margin-bottom: 2px;
+  }
+
+  .sortable-item input:nth-of-type(2),
+  .sortable-item input:nth-of-type(3) {
+    grid-column: 3;
+  }
+
+  .step-item {
+    grid-template-columns:
+      28px
+      30px
+      minmax(0, 1fr)
+      30px;
+  }
+
+  .step-item textarea {
+    grid-column: 3;
+  }
+
+  .drag-handle {
+    width: 26px;
+  }
+
+  .item-number {
+    width: 26px;
+
+    height: 26px;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 450px) {
+  .form-section {
+    padding: 14px;
+  }
+
+  .image-upload-box {
+    min-height: 145px;
+
+    padding: 20px 10px;
+  }
+
+  .image-upload-box span {
+    max-width: 250px;
+
+    line-height: 1.5;
+  }
+
+  .image-preview-grid {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .image-preview-item {
+    aspect-ratio: 1 / 1;
+  }
+
+  .remove-image-button {
+    width: 25px;
+
+    height: 25px;
+
+    font-size: 16px;
+  }
+
+  .existing-image-label {
+    font-size: 8px;
+
+    padding: 3px 5px;
+  }
+}
