@@ -3,13 +3,14 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
+
 const swaggerSpec = require("./config/swagger");
 const connectDB = require("./config/db");
+
 const recipeRoutes = require("./routes/recipe.routes");
-const errorMiddleware = require("./middleware/error.middleware");
-
-
 const authRoutes = require("./routes/auth.routes");
+
+const errorMiddleware = require("./middleware/error.middleware");
 
 dotenv.config();
 
@@ -28,7 +29,6 @@ app.use(
     )
 );
 
-
 app.get("/api/health", (req, res) => {
     res.json({
         success: true,
@@ -37,6 +37,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/recipes", recipeRoutes);
+
 app.use("/api/auth", authRoutes);
 
 app.use(
@@ -50,6 +51,6 @@ app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
 });
